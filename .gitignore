@@ -6,6 +6,7 @@
 
 env/
 Data/
+Data1/
 __pycache__/
 
 # 忽略环境变量文件
