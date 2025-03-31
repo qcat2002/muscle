@@ -11,6 +11,9 @@ def sample_rate_normalize:
 
 This function unifies the sample rates from different sources.
 
+Example-Results after 'sample_rate_normalize'
+![angle sample rate reduction](src/readme_source/angle_low_sample_rate.png)
+
 ----
 ***Next Step***
 

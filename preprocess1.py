@@ -29,7 +29,10 @@ if __name__ == "__main__":
              '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_max.mat']
     mat_info = mat_reader(paths[0])
     angle_low_sample, indices = sample_rate_normalize(mat_info[0])
-    plt.plot(mat_info[0])
-    plt.plot(indices, angle_low_sample)
+    plt.figure(dpi=300)
+    plt.title('Angle-Sample Rate Reduction')
+    plt.plot(mat_info[0], label='Original Data')
+    plt.plot(indices, angle_low_sample, label='Low Sample Rate Data')
+    plt.legend()
     plt.show()
 
