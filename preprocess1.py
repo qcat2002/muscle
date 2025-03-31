@@ -77,7 +77,7 @@ if __name__ == "__main__":
              '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_max.mat',
              '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_10dflx_max.mat',
              '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_10pflx_max.mat',]
-    mat_info = mat_reader(paths[3])
+    mat_info = mat_reader(paths[0])
     name = 'up_test1.mp4'
     rate = get_slices(mat_info)
     angle_low_sample, angle_indices = sample_rate_normalize(get_angle(mat_info), target_rate=rate)
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     velocity_low_sample, velocity_indices = sample_rate_normalize(get_velocity(mat_info), target_rate=rate)
     plot_denoised_data_with_low_sample_rate(get_velocity(mat_info), velocity_low_sample, velocity_indices, data_name='Velocity')
 
-    display_as_video(get_images(mat_info), [angle_low_sample, velocity_low_sample], f_data_types=['Angle', 'Velocity'], video_name=name)
+    # display_as_video(get_images(mat_info), [angle_low_sample, velocity_low_sample], f_data_types=['Angle', 'Velocity'], video_name=name)
 
 
 
