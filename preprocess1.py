@@ -2,6 +2,7 @@ import numpy as np
 from scipy.io import loadmat
 import multiprocessing as mp
 import tqdm
+import os
 import matplotlib.pyplot as plt
 
 def mat_reader(f_path):
@@ -11,6 +12,21 @@ def mat_reader(f_path):
     images_ = 'Cut_Ultrasound'
     f_mat = loadmat(f_path)
     return f_mat[angle_], f_mat[velocity_], f_mat[torque_], f_mat[images_]
+
+def get_angle(f_info):
+    return f_info[0]
+
+def get_velocity(f_info):
+    return f_info[1]
+
+def get_torque(f_info):
+    return f_info[2]
+
+def get_images(f_info):
+    return f_info[3]
+
+def get_slices(f_info):
+    return f_info[3].shape[2]
 
 def sample_rate_normalize(input_data, target_rate=601):
     input_data = input_data.flatten()
@@ -28,11 +44,13 @@ if __name__ == "__main__":
              '/Users/zepeng/Project/muscle/processed_data/363/TS01_1/30deg_plant.mat',
              '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_max.mat']
     mat_info = mat_reader(paths[0])
-    angle_low_sample, indices = sample_rate_normalize(mat_info[0])
+    print(mat_info[3].shape)
+    angle_low_sample, indices = sample_rate_normalize(mat_info[0], target_rate=get_slices(mat_info))
     plt.figure(dpi=300)
-    plt.title('Angle-Sample Rate Reduction')
+    plt.title(f'Angle-Sample Rate Reduction-{len(angle_low_sample)} Samples')
     plt.plot(mat_info[0], label='Original Data')
     plt.plot(indices, angle_low_sample, label='Low Sample Rate Data')
     plt.legend()
+    plt.savefig(os.path.join('src','readme_source','angle_low_sample_rate.png'))
     plt.show()
 
