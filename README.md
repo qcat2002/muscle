@@ -17,6 +17,26 @@ Example-Results after denoising
 Example-video of ultrasound images and its information
 [Download Video](up_test1.mp4)
 
+
+## Model Design And Training
+
+### Vanilla CNN Model
+
+
+### Active Contraction State Classifier
+
+The distribution of active and inactive contraction state is unequal.
+Should we train another model serving for binary classification?
+![active contraction state](src/readme_source/active contraction state%20idea.png)
+
+### Can auto-encoder assist us to solve the regression problem?
+
+
+### Can other corresponding information (Angle/Angular Velocity) help  to solve the regression problem
+
+
+### Can frame index help to solve the regression problem
+
 ----
 ***Next Step***
 
