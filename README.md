@@ -30,6 +30,7 @@ I guess the researcher standardized the torque value with its mean and stand dev
 May I get the exact mean and std to unify the value range reversely.
 
 ![torque values](src/readme_source/problem_march31.png)
+![torque values](src/readme_source/problem_march31_2.png)
 
 Comparison:
 

@@ -12,7 +12,8 @@ print(torque_small.min(), torque_small.max())
 mat2 = loadmat(path3)
 torque_large = mat2['Torque']
 
-plt.title('Range of Torque Values from different mat files')
+# plt.title('Range of Torque Values from different mat files')
+plt.title('Example of Small Torque Values')
 plt.plot(torque_small)
-plt.plot(torque_large)
+# plt.plot(torque_large)
 plt.show()
