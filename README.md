@@ -20,7 +20,27 @@ Example-video of ultrasound images and its information
 ----
 ***Next Step***
 
-Create Videos & Pre-processed dataset
+I find that the ultrasound image from different experiments are variant. Some of them are bright.
+Some of them are dark. More specifically, the muscle texture may clear in some ultrasound images.
+This is one of the main problem during data collections. I need to find some strategies to solve those
+domain shift.
+
+Now, I will normalize all images to mean=0, std=1. ***(Z-score Normalization / Standardization)***
+
+I firstly calculate the global mean and global std among all the datasets, which I will use.
+
+Then:
+
+norm_ultrasound = (ultrasound - global_mean) / global_std
+
+Comparison:
+
+| Input Range                        | Loss Stability | Convergence Speed | Training Stability |
+|-----------------------------------|----------------|-------------------|--------------------|
+| `[0, 255]` (Raw Pixel Values)     | High Fluctuation | Slow            | Poor               |
+| `[0, 1]` (Min-Max Normalization)  | Stable          | Fast              | Good               |
+| `mean=0, std=1` (Z-score Standardization) | Very Stable     | Very Fast         | Excellent          |
+
 
 ----
 ## Log
@@ -35,5 +55,9 @@ By comparing the signal changes with the muscle movements, I can assess whether 
 ### FINISH [March 31 2025 (Night)]
 
 I need to align all sample rates in mat file.
+
+### FINISH [March 31 2025 (Night)]
+
+Create Videos & Pre-processed dataset
 
 

@@ -132,11 +132,20 @@ def display_as_video(f_frames, f_datas, f_data_types, f_data_units, video_name='
 
     out.release()
 
+def normalize_ultrasound(us):
+    global_mean = 0.3341
+    global_std = 0.2158
+    us = us.astype(np.float32)
+    return (us - global_mean) / (global_std + 1e-5)
+
+
 def process_one_file(f_path):
     try:
         angle, vel, torque, us = mat_reader(f_path)
         rate = us.shape[2]
         my_name = name_extractor(f_path)
+        # normalize the image
+        us = normalize_ultrasound(us)
         angle, _ = sample_rate_normalize(denoise_signal(angle.flatten(), 151, 2), target_rate=rate)
         vel, _ = sample_rate_normalize(denoise_signal(vel.flatten(), 151, 2), target_rate=rate)
         torque, _ = sample_rate_normalize(denoise_signal(torque.flatten(), 51, 2), target_rate=rate)
@@ -173,36 +182,76 @@ if __name__ == "__main__":
         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_30pflx_t01.mat',
         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_30pflx_t02.mat',
     ]
-    path2 = [        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_t04.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_t04.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_t04.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_t04.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_t04.mat"]
+    path2 = [
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_0neutr_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_0neutr_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_0neutr_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_10dflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_10dflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_10dflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_10pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_10pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_10pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_20pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_20pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_20pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_t02.mat"
+    ]
+    path3 = [
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t04.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t05.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t06.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10dflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10dflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10dflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10dflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10pflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_20pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_20pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_20pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_20pflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_30pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_30pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_30pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_30pflx_t03.mat"
+    ]
+    path4 = [
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_0neutr_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_0neutr_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_0neutr_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_0neutr_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10dflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10dflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10dflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10dflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10pflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_20pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_20pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_20pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_20pflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_30pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_30pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_30pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_30pflx_t03.mat"
+    ]
+
 
     os.makedirs("src/processed_dataset", exist_ok=True)
-
+    path_decision = path4
     with Pool(processes=os.cpu_count()) as pool:
-        results = list(tqdm(pool.imap(process_one_file, path1), total=len(path1), desc="Processing files"))
+        results = list(tqdm(pool.imap(process_one_file, path_decision), total=len(path_decision), desc="Processing files"))
 
     for r in results:
         if r is None:
