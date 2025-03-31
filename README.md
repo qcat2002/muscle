@@ -32,14 +32,6 @@ May I get the exact mean and std to unify the value range reversely.
 ![torque values](src/readme_source/problem_march31.png)
 ![torque values](src/readme_source/problem_march31_2.png)
 
-Comparison:
-
-| Input Range                        | Loss Stability | Convergence Speed | Training Stability |
-|-----------------------------------|----------------|-------------------|--------------------|
-| `[0, 255]` (Raw Pixel Values)     | High Fluctuation | Slow            | Poor               |
-| `[0, 1]` (Min-Max Normalization)  | Stable          | Fast              | Good               |
-| `mean=0, std=1` (Z-score Standardization) | Very Stable     | Very Fast         | Excellent          |
-
 
 ----
 ## Log
