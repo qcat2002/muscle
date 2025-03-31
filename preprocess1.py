@@ -199,57 +199,11 @@ if __name__ == "__main__":
         "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_t01.mat",
         "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_t02.mat"
     ]
-    path3 = [
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t04.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t05.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_0neutr_t06.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10dflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10dflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10dflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10dflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_10pflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_20pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_20pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_20pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_20pflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_30pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_30pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_30pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS03/iso_30pflx_t03.mat"
-    ]
-    path4 = [
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_0neutr_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_0neutr_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_0neutr_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_0neutr_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10dflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10dflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10dflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10dflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_10pflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_20pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_20pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_20pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_20pflx_t03.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_30pflx_max.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_30pflx_t01.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_30pflx_t02.mat",
-        "/Users/zepeng/Project/muscle/processed_data/363/TS04/iso_30pflx_t03.mat"
-    ]
+
 
 
     os.makedirs("src/processed_dataset", exist_ok=True)
-    path_decision = path4
+    path_decision = path2
     with Pool(processes=os.cpu_count()) as pool:
         results = list(tqdm(pool.imap(process_one_file, path_decision), total=len(path_decision), desc="Processing files"))
 

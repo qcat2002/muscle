@@ -20,18 +20,16 @@ Example-video of ultrasound images and its information
 ----
 ***Next Step***
 
-I find that the ultrasound image from different experiments are variant. Some of them are bright.
-Some of them are dark. More specifically, the muscle texture may clear in some ultrasound images.
-This is one of the main problem during data collections. I need to find some strategies to solve those
-domain shift.
+variant range of torque values
 
-Now, I will normalize all images to mean=0, std=1. ***(Z-score Normalization / Standardization)***
+some datasets store torque values in really small values
+some datasets store torque values in large values
 
-I firstly calculate the global mean and global std among all the datasets, which I will use.
+I guess the researcher standardized the torque value with its mean and stand deviation
 
-Then:
+May I get the exact mean and std to unify the value range reversely.
 
-norm_ultrasound = (ultrasound - global_mean) / global_std
+![torque values](src/readme_source/problem_march31.png)
 
 Comparison:
 
@@ -59,5 +57,29 @@ I need to align all sample rates in mat file.
 ### FINISH [March 31 2025 (Night)]
 
 Create Videos & Pre-processed dataset
+
+### FINISH [March 31 2025 (Night)]
+
+I find that the ultrasound image from different experiments are variant. Some of them are bright.
+Some of them are dark. More specifically, the muscle texture may clear in some ultrasound images.
+This is one of the main problem during data collections. I need to find some strategies to solve those
+domain shift.
+
+Now, I will normalize all images to mean=0, std=1. ***(Z-score Normalization / Standardization)***
+
+I firstly calculate the global mean and global std among all the datasets, which I will use.
+
+Then:
+
+norm_ultrasound = (ultrasound - global_mean) / global_std
+
+Comparison:
+
+| Input Range                        | Loss Stability | Convergence Speed | Training Stability |
+|-----------------------------------|----------------|-------------------|--------------------|
+| `[0, 255]` (Raw Pixel Values)     | High Fluctuation | Slow            | Poor               |
+| `[0, 1]` (Min-Max Normalization)  | Stable          | Fast              | Good               |
+| `mean=0, std=1` (Z-score Standardization) | Very Stable     | Very Fast         | Excellent          |
+
 
 
