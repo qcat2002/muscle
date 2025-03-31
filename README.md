@@ -20,7 +20,7 @@ Example-video of ultrasound images and its information
 ----
 ***Next Step***
 
-I need to unify more information from mat file.
+Create Videos & Pre-processed dataset
 
 ----
 ## Log
@@ -32,6 +32,8 @@ I need to determine whether some abnormal fluctuations in the signal are meaning
 The approach is to visualize the signal and analyze synchronized video recordings to observe muscle activity.
 By comparing the signal changes with the muscle movements, I can assess whether the fluctuations are abnormal or irrelevant.
 
+### FINISH [March 31 2025 (Night)]
 
+I need to align all sample rates in mat file.
 
 
