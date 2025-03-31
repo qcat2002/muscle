@@ -7,5 +7,5 @@ def plot_denoised_data_with_low_sample_rate(original_data, low_rate_data, indice
     plt.plot(original_data, label='Original Data')
     plt.plot(indices, low_rate_data, label='Low Sample Rate Data')
     plt.legend()
-    plt.savefig(os.path.join('src', 'readme_source', f'after denoising-{data_name.lower()}_low_sample_rate.png'))
+    plt.savefig(os.path.join('src', 'readme_source', f'after_denoising-{data_name.lower()}_low_sample_rate.png'))
     plt.show()
