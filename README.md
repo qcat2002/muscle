@@ -27,7 +27,7 @@ Example-video of ultrasound images and its information
 
 The distribution of active and inactive contraction state is unequal.
 Should we train another model serving for binary classification?
-![active contraction state](src/readme_source/active contraction state%20idea.png)
+![active contraction state](src/readme_source/active contraction state idea.png)
 
 ### Can auto-encoder assist us to solve the regression problem?
 
