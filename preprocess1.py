@@ -1,6 +1,6 @@
 import numpy as np
-from scipy.io import loadmat
-import multiprocessing as mp
+from scipy.io import loadmat, savemat
+from multiprocessing import Pool
 from tqdm import tqdm
 import os
 import matplotlib.pyplot as plt
@@ -132,10 +132,32 @@ def display_as_video(f_frames, f_datas, f_data_types, f_data_units, video_name='
 
     out.release()
 
+def process_one_file(f_path):
+    try:
+        angle, vel, torque, us = mat_reader(f_path)
+        rate = us.shape[2]
+        my_name = name_extractor(f_path)
+        angle, _ = sample_rate_normalize(denoise_signal(angle.flatten(), 151, 2), target_rate=rate)
+        vel, _ = sample_rate_normalize(denoise_signal(vel.flatten(), 151, 2), target_rate=rate)
+        torque, _ = sample_rate_normalize(denoise_signal(torque.flatten(), 51, 2), target_rate=rate)
+        display_as_video(us,
+                         f_datas=[angle, vel, torque],
+                         f_data_types=['Angle', 'Velocity', 'Torque'],
+                         f_data_units=['deg', 'deg/s', 'N*m'],
+                         video_name=my_name)
+        return {
+            "Angle": angle,
+            "AngularVelocity": vel,
+            "Torque": torque,
+            "Ultrasound": us,
+            "Name": name_extractor(f_path)
+        }
+    except Exception as e:
+        print(f"[ERROR] Failed to process {f_path}: {e}")
+        return None
+
 if __name__ == "__main__":
-    paths = [
-        '/Users/zepeng/Project/muscle/processed_data/363/TS01_1/0deg_iso.mat',
-        '/Users/zepeng/Project/muscle/processed_data/363/TS01_1/30deg_plant.mat',
+    path1 = [
         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_max.mat',
         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_t01.mat',
         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_t02.mat',
@@ -151,43 +173,46 @@ if __name__ == "__main__":
         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_30pflx_t01.mat',
         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_30pflx_t02.mat',
     ]
+    path2 = [        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_0neutr_t04.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10dflx_t04.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_10pflx_t04.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_20pflx_t04.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_max.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_t01.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_t02.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_t03.mat",
+        "/Users/zepeng/Project/muscle/processed_data/363/TS01_3/iso_30pflx_t04.mat"]
 
-    file_index = 0
-    mat_info = mat_reader(paths[file_index])
-    name = name_extractor(paths[file_index])
-    rate = get_slices(mat_info)
-    # angle
-    angle_low_sample, angle_indices = sample_rate_normalize(get_angle(mat_info), target_rate=rate)
-    # plot_denoised_data_with_low_sample_rate(get_angle(mat_info), angle_low_sample, angle_indices, data_name='Angle')
-    # velocity
-    velocity_low_sample, velocity_indices = sample_rate_normalize(get_velocity(mat_info), target_rate=rate)
-    # plot_denoised_data_with_low_sample_rate(get_velocity(mat_info), velocity_low_sample, velocity_indices, data_name='Velocity')
-    # torque
-    torque_low_sample, torque_indeces = sample_rate_normalize(get_torque(mat_info), target_rate=rate)
-    # plot_denoised_data_with_low_sample_rate(get_torque(mat_info), torque_low_sample, torque_indeces, data_name='Torque')
+    os.makedirs("src/processed_dataset", exist_ok=True)
 
-    display_as_video(get_images(mat_info),
-                     [angle_low_sample, velocity_low_sample, torque_low_sample],
-                     f_data_types=['Angle', 'Velocity', 'Torque'],
-                     f_data_units=['deg', 'deg/s', 'N*m'],
-                     video_name=name)
+    with Pool(processes=os.cpu_count()) as pool:
+        results = list(tqdm(pool.imap(process_one_file, path1), total=len(path1), desc="Processing files"))
 
-
-
-
-
-
-
-
-    """
-    Old plot codes
-    """
-    # angle_low_sample, indices = sample_rate_normalize(mat_info[0], target_rate=get_slices(mat_info))
-    # plt.figure(dpi=300)
-    # plt.title(f'Angle-Sample Rate Reduction-{len(angle_low_sample)} Samples')
-    # plt.plot(mat_info[0], label='Original Data')
-    # plt.plot(indices, angle_low_sample, label='Low Sample Rate Data')
-    # plt.legend()
-    # plt.savefig(os.path.join('src','readme_source','angle_low_sample_rate.png'))
-    # plt.show()
-
+    for r in results:
+        if r is None:
+            continue
+        save_path = os.path.join("src/processed_dataset", f"{r['Name']}.mat")
+        savemat(save_path, {
+            "Angle": r["Angle"],
+            "AngularVelocity": r["AngularVelocity"],
+            "Torque": r["Torque"],
+            "Ultrasound": r["Ultrasound"],
+            "Name": r["Name"]
+        }, do_compression=True)
+        print(f"[INFO] Saved: {save_path}")

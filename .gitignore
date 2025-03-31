@@ -8,6 +8,7 @@ env/
 Data/
 processed_data/
 __pycache__/
+src/processed_dataset/
 
 # 忽略环境变量文件
 .env
