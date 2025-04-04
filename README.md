@@ -2,20 +2,7 @@
 
 ## Preprocessing
 
-def mat_reader:
-
-This function is used to extract information from original mat file in standard method.
-
-def sample_rate_normalize:
-
-This function unifies the sample rates from different sources.
-
-Example-Results after 'sample_rate_normalize'
-![angle sample rate reduction](src/readme_source/special_angle_low_sample_rate.png)
-Example-Results after denoising
-![denoising](src/readme_source/special_after_denoising-angle_low_sample_rate.png)
-Example-video of ultrasound images and its information
-[Download Video](up_test1.mp4)
+IN PROGRESS !!!
 
 
 ## Model Design And Training
