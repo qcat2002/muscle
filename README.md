@@ -41,7 +41,13 @@ I need to subtract the negative torque (average) for each sample index. [1 - (-1
 ## Important Meeting Records
 
 - April 1 2025
-  - Professor.Yeo suggested me to label all axes with their meanings. It is helpful when doing presentations.
+  - (Plot Problem) Professor.Yeo suggested me to label all axes with their meanings. It is helpful when doing presentations.
+  - (Lingering Issue) Why you want to make a classifier? I need to prove for Professor.Yeo!
+    
+
+
+
+    
 
 ----
 ## Log
