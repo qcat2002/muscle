@@ -45,6 +45,7 @@ def compute_global_mean_std(mat_paths):
     pixel_values = np.concatenate(pixel_values)
     return np.mean(pixel_values), np.std(pixel_values)
 
-all_paths = path1 + path2
+# all_paths = path1 + path2
+all_paths = path2
 global_mean, global_std = compute_global_mean_std(all_paths)
 print(f"Global mean: {global_mean:.4f}, std: {global_std:.4f}")

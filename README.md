@@ -32,6 +32,9 @@ Should we train another model serving for binary classification?
 
 ### Can auto-encoder assist us to solve the regression problem?
 
+if classifier is helpful:
+1. Semi-supervised Autoencoder (attach a binary classifier to enhance the sensitivity of active contraction frame)
+2. Train two autoencoders after binary classifier
 
 ### Can other corresponding information (Angle/Angular Velocity) help  to solve the regression problem
 
@@ -49,9 +52,6 @@ some datasets store torque values in large values
 I guess the researcher standardized the torque value with its mean and stand deviation
 
 May I get the exact mean and std to unify the value range reversely.
-
-![torque values](src/readme_source/problem_march31.png)
-![torque values](src/readme_source/problem_march31_2.png)
 
 
 ----
@@ -95,5 +95,19 @@ Comparison:
 | `[0, 1]` (Min-Max Normalization)  | Stable          | Fast              | Good               |
 | `mean=0, std=1` (Z-score Standardization) | Very Stable     | Very Fast         | Excellent          |
 
+
+### FINISH [April 1 2025 (Morning)]
+
+Variant range of torque values!
+
+Some datasets store torque values in really small values.
+Some datasets store torque values in large values.
+
+I guess the researcher standardized the torque value with its mean and stand deviation
+
+May I get the exact mean and std to unify the value range reversely?
+
+Based on Professor.Yeo 's guidance, I understand I do not need to denoise the signal of angle & angular velocity, they are isometric.
+I can directly calculate the average. Then, the original fluctuated signal will be replaced with average value.
 
 

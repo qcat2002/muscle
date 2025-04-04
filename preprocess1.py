@@ -199,10 +199,20 @@ if __name__ == "__main__":
         "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_t01.mat",
         "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_t02.mat"
     ]
-
-
-
-    os.makedirs("src/processed_dataset", exist_ok=True)
+    # change me to modify the global normalization
+    normal_type = 0
+    # this data is calculated by python script 'global_calculation.py'
+    """
+    TS02 only, but we do not test specifically in experiments
+    mean: 0.3742, std: 0.2230
+    """
+    normal_dict = {
+        # type : (mean, std)
+        'normal_by_ts01': (0.3387, 0.1772),
+        'normal_by_ts01_ts02': (0.3571, 0.2030),
+    }
+    keys = list(normal_dict.keys())
+    os.makedirs("src/processed_dataset/"+f"{keys[normal_type]}", exist_ok=True)
     path_decision = path2
     with Pool(processes=os.cpu_count()) as pool:
         results = list(tqdm(pool.imap(process_one_file, path_decision), total=len(path_decision), desc="Processing files"))
