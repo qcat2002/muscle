@@ -94,8 +94,8 @@ I guess the researcher standardized the torque value with its mean and stand dev
 
 May I get the exact mean and std to unify the value range reversely?
 
-Based on Professor.Yeo 's guidance, I understand I do not need to denoise the signal of angle & angular velocity, they are isometric.
-I can directly calculate the average. Then, the original fluctuated signal will be replaced with average value.
+***Based on Professor.Yeo 's guidance, I understand I do not need to denoise the signal of angle & angular velocity, they are isometric.
+I can directly calculate the average. Then, the original fluctuated signal will be replaced with average value.***
 
 ### FINISH [April 4 2025 (Afternoon)]
 
