@@ -31,11 +31,7 @@ if classifier is helpful:
 ----
 ***Next Step***
 
-I need to implement codes to calculate average of angle and angular velocity.
-
-As well as, some mat files has passive torque (showing as negative value). As Professor.Yeo reminded (Meeting [April 1 2025]).
-I need to subtract the negative torque (average) for each sample index. [1 - (-1) = 1 + 1]
-
+TODO
 
 ----
 ## Important Meeting Records
@@ -43,11 +39,7 @@ I need to subtract the negative torque (average) for each sample index. [1 - (-1
 - April 1 2025
   - (Plot Problem) Professor.Yeo suggested me to label all axes with their meanings. It is helpful when doing presentations.
   - (Lingering Issue) Why you want to make a classifier? I need to prove for Professor.Yeo!
-    
-
-
-
-    
+ 
 
 ----
 ## Log
@@ -104,5 +96,19 @@ May I get the exact mean and std to unify the value range reversely?
 
 Based on Professor.Yeo 's guidance, I understand I do not need to denoise the signal of angle & angular velocity, they are isometric.
 I can directly calculate the average. Then, the original fluctuated signal will be replaced with average value.
+
+### FINISH [April 4 2025 (Afternoon)]
+
+I need to implement codes to calculate average of angle and angular velocity.
+
+As well as, some mat files has passive torque (showing as negative value). As Professor.Yeo reminded (Meeting [April 1 2025]).
+I need to subtract the negative torque (average) for each sample index. [1 - (-1) = 1 + 1]
+
+My work:
+
+- Denoising
+![denoise](src/readme_source/comparison_active_contraction_state_idea.png)
+- Correcting (offset with passive torque)
+![correction](src/readme_source/corrected_comparison_active_contraction_state_idea.png)
 
 

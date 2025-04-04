@@ -2,6 +2,7 @@ import numpy as np
 from scipy.io import loadmat
 import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
+from preprocess import eliminate_passive_torque
 
 def denoise_signal(signal, window_length=21, polyorder=3):
     """
@@ -19,15 +20,16 @@ fig, ax = plt.subplots(1, 2, dpi=300, figsize=(16, 6))
 max_, min_ = 0, 0
 for ii, path in enumerate(paths):
     torque = loadmat(path)['Torque'].flatten()
-    t_max = np.max(torque)
+    denoised_torque = denoise_signal(torque, window_length=51, polyorder=3)
+    final_torque = eliminate_passive_torque(denoised_torque)
+    t_max = np.max(final_torque)
     t_min = np.min(torque)
     if t_max > max_:
         max_ = t_max
     if t_min < min_:
         min_ = t_min
-    ax[0].plot(torque, label=f'torque {ii+1}')
-    denoised_torque = denoise_signal(torque, window_length=51, polyorder=3)
-    ax[1].plot(denoised_torque, label=f"denoised torque {ii+1}")
+    ax[0].plot(denoised_torque, label=f'Raw Torque (Denoised) {ii+1}')
+    ax[1].plot(final_torque, label=f"Corrected Torque {ii+1}")
 ax[0].axhline(0, linestyle='--', color='k')
 ax[1].axhline(0, linestyle='--', color='k')
 ax[0].set_ylim(min_, max_)
@@ -35,11 +37,11 @@ ax[1].set_ylim(min_, max_)
 ax[0].set_xlabel('Sample Indices (Time)')
 ax[0].set_ylabel('Torque')
 ax[1].set_xlabel('Sample Indices (Time)')
-ax[1].set_ylabel('Denoised Torque')
+ax[1].set_ylabel('Torque')
 ax[0].legend()
 ax[1].legend()
 ax[0].set_title('Original Torque Tendency', fontsize=20, fontweight='bold')
-ax[1].set_title('Denoised Torque Tendency', fontsize=20, fontweight='bold')
+ax[1].set_title('Corrected Torque Tendency', fontsize=20, fontweight='bold')
 plt.tight_layout()
 plt.show()
 
