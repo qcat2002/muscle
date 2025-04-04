@@ -44,14 +44,10 @@ if classifier is helpful:
 ----
 ***Next Step***
 
-variant range of torque values
+I need to implement codes to calculate average of angle and angular velocity.
 
-some datasets store torque values in really small values
-some datasets store torque values in large values
-
-I guess the researcher standardized the torque value with its mean and stand deviation
-
-May I get the exact mean and std to unify the value range reversely.
+As well as, some mat files has passive torque (showing as negative value). As Professor.Yeo reminded (Meeting [April 1 2025]).
+I need to subtract the negative torque (average) for each sample index. [1 - (-1) = 1 + 1]
 
 
 ----
