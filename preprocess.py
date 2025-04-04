@@ -15,7 +15,7 @@ def mat_reader(f_path):
     torque_ = 'Torque'
     images_ = 'Cut_Ultrasound'
     f_mat = loadmat(f_path)
-    return f_mat[angle_], f_mat[velocity_], f_mat[torque_], f_mat[images_]
+    return f_mat[angle_].flatten(), f_mat[velocity_].flatten(), f_mat[torque_].flatten(), f_mat[images_]
 
 def denoise_signal(signal, window_length=21, polyorder=3):
     """
@@ -26,26 +26,8 @@ def denoise_signal(signal, window_length=21, polyorder=3):
     """
     return savgol_filter(signal, window_length, polyorder)
 
-def get_angle(f_info):
-    """
-    :param f_info: some dictionary objects, which read from mat files
-    :return: angle numpy array, had already flatten()
-    """
-    return denoise_signal(f_info[0].flatten(), window_length=151, polyorder=2)
-
-def get_velocity(f_info):
-    """
-    :param f_info: some dictionary objects, which read from mat files
-    :return: velocity numpy array, had already flatten()
-    """
-    return denoise_signal(f_info[1].flatten(), window_length=151, polyorder=2)
-
-def get_torque(f_info):
-    """
-    :param f_info: some dictionary objects, which read from mat files
-    :return: torque numpy array, had already flatten()
-    """
-    return denoise_signal(f_info[2].flatten(), window_length=51, polyorder=2)
+def average_it(signal):
+    return np.mean(signal)
 
 def get_images(f_info):
     """
@@ -79,6 +61,13 @@ def sample_rate_normalize(input_data, target_rate=601, kind='cubic'):
     f_resampled = interpolator(f_target_indices)
 
     return f_resampled, f_target_indices
+
+def eliminate_passive_torque(torque):
+    passive_mask = torque < -1
+    passive_torque = torque[passive_mask]
+    passive_mean = np.mean(passive_torque)
+    corrected_torque = torque - passive_mean
+    return corrected_torque
 
 def name_extractor(f_path):
     """
@@ -136,25 +125,28 @@ def normalize_ultrasound(fus, fmean, fstd):
     return (fus - fmean) / (fstd + 1e-5)
 
 
-def process_one_file(f_path):
+def process_one_file(input_args):
+    f_path, f_mean, f_std = input_args
     try:
         angle, vel, torque, us = mat_reader(f_path)
         rate = us.shape[2]
         my_name = name_extractor(f_path)
         # normalize the image
-        us = normalize_ultrasound(us)
-        angle, _ = sample_rate_normalize(denoise_signal(angle.flatten(), 151, 2), target_rate=rate)
-        vel, _ = sample_rate_normalize(denoise_signal(vel.flatten(), 151, 2), target_rate=rate)
-        torque, _ = sample_rate_normalize(denoise_signal(torque.flatten(), 51, 2), target_rate=rate)
+        us = normalize_ultrasound(us, f_mean, f_std)
+        angle = np.array([average_it(angle)] * rate)
+        vel = np.array([average_it(vel)] * rate)
+        denoised_torque = denoise_signal(torque, 51, 3)
+        corrected_torque = eliminate_passive_torque(denoised_torque)
+        final_torque, _ = sample_rate_normalize(corrected_torque, target_rate=rate)
         display_as_video(us,
-                         f_datas=[angle, vel, torque],
+                         f_datas=[angle, vel, final_torque],
                          f_data_types=['Angle', 'Velocity', 'Torque'],
                          f_data_units=['deg', 'deg/s', 'N*m'],
                          video_name=my_name)
         return {
             "Angle": angle,
             "AngularVelocity": vel,
-            "Torque": torque,
+            "Torque": final_torque,
             "Ultrasound": us,
             "Name": name_extractor(f_path)
         }
@@ -197,7 +189,7 @@ if __name__ == "__main__":
         "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_t02.mat"
     ]
     # change me to modify the global normalization
-    normal_type = 0
+    normal_type = 1
     # this data is calculated by python script 'global_calculation.py'
     """
     TS02 only, but we do not test specifically in experiments
@@ -209,7 +201,25 @@ if __name__ == "__main__":
         'normal_by_ts01_ts02': (0.3571, 0.2030),
     }
     keys = list(normal_dict.keys())
-    os.makedirs("src/processed_dataset/"+f"{keys[normal_type]}", exist_ok=True)
-    path_decision = path2
+    stem_path = "src/processed_dataset/"+f"{keys[normal_type]}"
+    os.makedirs(stem_path, exist_ok=True)
+    path_decision = path1 + path2
+    inputs = []
+    for path in path_decision:
+        args = normal_dict[keys[normal_type]]
+        inputs.append((path, args[0], args[1]))
     with Pool(processes=os.cpu_count()) as pool:
-        results = list(tqdm(pool.imap(process_one_file, path_decision), total=len(path_decision), desc="Processing files"))
+        results = list(tqdm(pool.imap(process_one_file, inputs), total=len(path_decision), desc="Processing files"))
+
+    for r in results:
+        if r is None:
+            continue
+        save_path = os.path.join(stem_path, f"{r['Name']}.mat")
+        savemat(save_path, {
+            "Angle": r["Angle"],
+            "AngularVelocity": r["AngularVelocity"],
+            "Torque": r["Torque"],
+            "Ultrasound": r["Ultrasound"],
+            "Name": r["Name"]
+        }, do_compression=True)
+        print(f"[INFO] Saved: {save_path}")

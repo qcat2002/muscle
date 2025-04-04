@@ -1,33 +1,78 @@
+import numpy as np
 from scipy.io import loadmat
 import matplotlib.pyplot as plt
+from scipy.signal import savgol_filter
 
+def denoise_signal(signal, window_length=21, polyorder=3):
+    """
+    :param signal: the signal need to denoise
+    :param window_length: length of window when denoising
+    :param polyorder: the degree of polynomial
+    :return: a denoised signal
+    """
+    return savgol_filter(signal, window_length, polyorder)
 
-path1 = '/Users/zepeng/Project/muscle/processed_data/513/TS05/iso_0neutr_max.mat'
-path2 = '/Users/zepeng/Project/muscle/processed_data/513/TS07/iso_0neutr_max.mat'
-path3 = '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_max.mat'
-path4 = '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_20pflx_t01.mat'
-path5 = '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_30pflx_t02.mat'
-mat = loadmat(path2)
-# torque_small = mat['Torque']
-# torque_small = torque_small * 150
-# print(torque_small.min(), torque_small.max())
-mat2 = loadmat(path3)
-torque_large = mat2['Torque']
-mat3 = loadmat(path4)
-torque_large2 = mat3['Torque']
-mat4 = loadmat(path5)
-torque_large3 = mat4['Torque']
-
-# plt.title('Range of Torque Values from different mat files')
-# plt.title('Example of Small Torque Values')
-plt.figure(dpi=300)
-plt.title('Set a threshold to classify Active Contraction State')
-# plt.plot(torque_small)
-plt.axhline(y=5, color='red', linestyle='--', linewidth=1)
-plt.xlabel('Sample Indices')
-plt.ylabel('Torque Values')
-plt.plot(torque_large, label='Torque1')
-plt.plot(torque_large2, label='Torque2')
-plt.plot(torque_large3, label='Torque3')
-plt.legend()
+paths = ['/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_max.mat',
+         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_t01.mat',
+         '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_t02.mat',]
+fig, ax = plt.subplots(1, 2, dpi=300, figsize=(16, 6))
+max_, min_ = 0, 0
+for ii, path in enumerate(paths):
+    torque = loadmat(path)['Torque'].flatten()
+    t_max = np.max(torque)
+    t_min = np.min(torque)
+    if t_max > max_:
+        max_ = t_max
+    if t_min < min_:
+        min_ = t_min
+    ax[0].plot(torque, label=f'torque {ii+1}')
+    denoised_torque = denoise_signal(torque, window_length=51, polyorder=3)
+    ax[1].plot(denoised_torque, label=f"denoised torque {ii+1}")
+ax[0].axhline(0, linestyle='--', color='k')
+ax[1].axhline(0, linestyle='--', color='k')
+ax[0].set_ylim(min_, max_)
+ax[1].set_ylim(min_, max_)
+ax[0].set_xlabel('Sample Indices (Time)')
+ax[0].set_ylabel('Torque')
+ax[1].set_xlabel('Sample Indices (Time)')
+ax[1].set_ylabel('Denoised Torque')
+ax[0].legend()
+ax[1].legend()
+ax[0].set_title('Original Torque Tendency', fontsize=20, fontweight='bold')
+ax[1].set_title('Denoised Torque Tendency', fontsize=20, fontweight='bold')
+plt.tight_layout()
 plt.show()
+
+
+
+
+
+# path1 = '/Users/zepeng/Project/muscle/processed_data/513/TS05/iso_0neutr_max.mat'
+# path2 = '/Users/zepeng/Project/muscle/processed_data/513/TS07/iso_0neutr_max.mat'
+# path3 = '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_0neutr_max.mat'
+# path4 = '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_20pflx_t01.mat'
+# path5 = '/Users/zepeng/Project/muscle/processed_data/363/TS01_2/iso_30pflx_t02.mat'
+# mat = loadmat(path2)
+# # torque_small = mat['Torque']
+# # torque_small = torque_small * 150
+# # print(torque_small.min(), torque_small.max())
+# mat2 = loadmat(path3)
+# torque_large = mat2['Torque']
+# mat3 = loadmat(path4)
+# torque_large2 = mat3['Torque']
+# mat4 = loadmat(path5)
+# torque_large3 = mat4['Torque']
+#
+# # plt.title('Range of Torque Values from different mat files')
+# # plt.title('Example of Small Torque Values')
+# plt.figure(dpi=300)
+# plt.title('Set a threshold to classify Active Contraction State')
+# # plt.plot(torque_small)
+# plt.axhline(y=5, color='red', linestyle='--', linewidth=1)
+# plt.xlabel('Sample Indices')
+# plt.ylabel('Torque Values')
+# plt.plot(torque_large, label='Torque1')
+# plt.plot(torque_large2, label='Torque2')
+# plt.plot(torque_large3, label='Torque3')
+# plt.legend()
+# plt.show()
