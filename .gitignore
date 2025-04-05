@@ -7,6 +7,7 @@
 env/
 Data/
 processed_data/
+processed_dataset/
 __pycache__/
 src/processed_dataset/
 
