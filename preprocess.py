@@ -189,7 +189,7 @@ if __name__ == "__main__":
         "/Users/zepeng/Project/muscle/processed_data/363/TS02/iso_30pflx_t02.mat"
     ]
     # change me to modify the global normalization
-    normal_type = 1
+    normal_type = 2
     # this data is calculated by python script 'global_calculation.py'
     """
     TS02 only, but we do not test specifically in experiments
@@ -199,6 +199,7 @@ if __name__ == "__main__":
         # type : (mean, std)
         'normal_by_ts01': (0.3387, 0.1772),
         'normal_by_ts01_ts02': (0.3571, 0.2030),
+        'normal_by_ts02':  (0.3742, 0.2230)
     }
     keys = list(normal_dict.keys())
     stem_path = "src/processed_dataset/"+f"{keys[normal_type]}"
