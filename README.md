@@ -1,4 +1,5 @@
 # Summer Project
+Can Deep Learning Models success to handle regression problems in biomedical image processing.
 
 ## Preprocessing
 
@@ -38,8 +39,8 @@ we can utilize the fittest dataset for more complex models.
 
 I need to prepare five different for this small experiments:
 
-No Preprocess:
-1. We use the raw intensity values, then feed to the model.
+No Preprocess (Baseline):
+1. We use raw intensity values, then feed to the model.
 
 Standardization Method (mean 0 / std 1, or we say ***x ~ N(0, 1)***, x is one ultrasound image)
 1. We use the mean and std of TS01, then standardize TS01 and TS02.
@@ -50,6 +51,17 @@ Histogram Matching Method
 1. We use the first image in the TS01 to match all the rest ultrasound images.
 ![histogram1](src/readme_source/histgram_compare_raw.png)
 ![histogram2](src/readme_source/histgram_compare_matched.png)
+
+***Overview***
+
+| Strategy ID | Method                        | Description                                                           | Mean Unified? | Std Unified? | Distribution Shape                | Notes                                             |
+|-------------|-------------------------------|-----------------------------------------------------------------------|---------------|--------------|------------------------------------|---------------------------------------------------|
+| **S1**      | No Preprocess                 | Use raw ultrasound images without any normalization.                 | ❌            | ❌           | Highly variant across subjects     | Baseline; may overfit to individual subjects      |
+| **S2**      | Standardization (TS01 stats)  | Normalize both TS01 and TS02 using the mean and std of TS01.         | ✅            | ✅           | Matches TS01's standard Gaussian   | May introduce subject-specific bias               |
+| **S3**      | Standardization (TS02 stats)  | Normalize both TS01 and TS02 using the mean and std of TS02.         | ✅            | ✅           | Matches TS02's standard Gaussian   | Control experiment to compare with S2             |
+| **S4**      | Global Standardization        | Normalize using the combined mean and std of TS01 + TS02.            | ✅            | ✅           | Balanced Gaussian distribution     | Fair standardization?                             |
+| **S5**      | Histogram Matching            | Match all images to the first image in TS01.                         | ❓            | ❓           | Matches the intensity shape of reference | More style-preserving, less sensitive to outliers |
+
 
 ----
 ## Important Meeting Records
