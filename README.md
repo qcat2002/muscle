@@ -62,6 +62,21 @@ Histogram Matching Method
 | **S4**      | Global Standardization        | Normalize using the combined mean and std of TS01 + TS02.            | ✅            | ✅           | Balanced Gaussian distribution     | Fair standardization?                             |
 | **S5**      | Histogram Matching            | Match all images to the first image in TS01.                         | ❓            | ❓           | Matches the intensity shape of reference | More style-preserving, less sensitive to outliers |
 
+Additional Notes:
+
+In the experiments, I set up S2 and S3, where are biased.
+The purpose is to test whether Deep Learning models can still be generalized while the input contains lots of features had not seen before.
+Based on learning theory, if we can provide more types of ultrasound images of muscle, it possibly makes the same deep learning model more generalized.
+However, I can only state it as a guess. I do not have more datasets to assess the idea.
+
+In the project, we merely have two types of muscle ultrasound images. It is quick to calculate the global mean and std.
+Therefore, I design S4. I want to see whether S4 can outperform compared to biased S2 and S3.
+
+S5 is another main preprocess methods for medical images. ***(I will put references later)***
+I would like to compare.
+
+--Haven't Decided--
+S6 - combination of global standardization and histogram matching ??
 
 ----
 ## Important Meeting Records
