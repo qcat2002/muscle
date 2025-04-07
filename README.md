@@ -38,12 +38,15 @@ we can utilize the fittest dataset for more complex models.
 
 I need to prepare five different for this small experiments:
 
+No Preprocess:
+1. We use the raw intensity values, then feed to the model.
+
 Standardization Method (mean 0 / std 1, or we say ***x ~ N(0, 1)***, x is one ultrasound image)
 1. We use the mean and std of TS01, then standardize TS01 and TS02.
 2. We use the mean and std of TS02, then standardize TS01 and TS02 **(control experiment)**.
 3. We use the global mean and global std (TS01 & TS02), then standardize TS01 and TS02.
 
-Histogram Matching
+Histogram Matching Method
 1. We use the first image in the TS01 to match all the rest ultrasound images.
 ![histogram1](src/readme_source/histgram_compare_raw.png)
 ![histogram2](src/readme_source/histgram_compare_matched.png)

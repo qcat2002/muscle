@@ -26,7 +26,7 @@ gs = gridspec.GridSpec(1, 3, width_ratios=[3, 1.5, 1.5], wspace=0.05)
 # Histogram
 ax0 = fig.add_subplot(gs[0])
 ax0.set_title('Comparison of Intensity Histograms between\nvariant Ultrasound Images', fontweight='bold')
-ax0.hist(img1.ravel(), bins=256, range=(0, 1), alpha=0.5, label='Ultrasound Image Type 1')
+ax0.hist(img1.ravel(), bins=256, range=(0, 1), alpha=0.5, label='Ultrasound Image Type 1 (Reference)')
 ax0.hist(img2_.ravel(), bins=256, range=(0, 1), alpha=0.5, label='Ultrasound Image Type 2 (Matched)')
 ax0.set_xlabel('Intensity', fontsize=14, fontweight='bold')
 ax0.set_ylabel('Frequency (Num of Pixels)', fontsize=14, fontweight='bold')
